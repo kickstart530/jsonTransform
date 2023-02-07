@@ -1,4 +1,4 @@
-fullname:
+fullName:
     (S('customer', 'first_name') + K(' ') + S('customer', 'last_name'))
 city:
     S('address', 'city')
