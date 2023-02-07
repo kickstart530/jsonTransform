@@ -1,14 +1,15 @@
 import json
+import yaml
 from jsonbender import bend, K, S
 
 # Create a mapping between source and destination JSON files
-MAPPING = {
-    'fullName': (S('customer', 'first_name') +
-                 K(' ') +
-                 S('customer', 'last_name')),
-    'city': S('address', 'city'),
-}
+with open("mapping.yaml","r") as file:
+    MAPPINGFILE = yaml.load(file,Loader=yaml.FullLoader)
 
+MAPPING = dict()
+for key, value in MAPPINGFILE.items():
+    m = { key: eval(value)}
+    MAPPING.update(m)
 
 # Load the Input.json
 sourceFile = open('input.json')
