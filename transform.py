@@ -2,29 +2,32 @@ import json
 import yaml
 from jsonbender import bend, K, S
 
-# Create a mapping between source and destination JSON files
-with open("mapping.yaml","r") as file:
-    MAPPINGFILE = yaml.load(file,Loader=yaml.FullLoader)
+try:
+    with open("mapping.yaml", "r") as file:
+        MAPPINGFILE = yaml.load(file, Loader=yaml.FullLoader)
 
-MAPPING = dict()
-for key, value in MAPPINGFILE.items():
-    m = { key: eval(value)}
-    MAPPING.update(m)
+    MAPPING = {}
+    for key, value in MAPPINGFILE.items():
+        if isinstance(value, str):
+            MAPPING[key] = eval(value)
+        else:
+            MAPPING[key] = value
 
-# Load the Input.json
-sourceFile = open('input.json')
-source = json.load(sourceFile)
-sourceFile.close()
+    with open('input.json', 'r') as sourceFile:
+        source = json.load(sourceFile)
 
-result = bend(MAPPING, source)
+    result = bend(MAPPING, source)
 
-# Create a output.json with JSONBender Output
-outputFile = open('output.json','w');
+    with open('output.json', 'w') as outputFile:
+        json.dump(result, outputFile)
 
-json_object = json.dumps(result)
+    print(json.dumps(result))
 
-outputFile.write(json_object)
-
-print(json_object)
-
-outputFile.close()
+except FileNotFoundError as e:
+    print(f"Error: Required file not found - {e}")
+except yaml.YAMLError as e:
+    print(f"Error: Invalid YAML format - {e}")
+except json.JSONDecodeError as e:
+    print(f"Error: Invalid JSON format - {e}")
+except Exception as e:
+    print(f"Error: {e}")
