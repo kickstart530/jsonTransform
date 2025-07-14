@@ -1,2 +1,4 @@
 pyyaml>=6.0
-jsonbender>=0.9.5
+jsonbender==0.9.3
+pylint
+pytest
