@@ -8,7 +8,7 @@ try:
 
     MAPPING = {}
     for key, value in MAPPINGFILE.items():
-        if isinstance(value, str) and value.strip().startswith('(') and value.strip().endswith(')'):
+        if isinstance(value, str):
             MAPPING[key] = eval(value)
         else:
             MAPPING[key] = value
